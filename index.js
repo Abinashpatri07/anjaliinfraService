@@ -111,7 +111,7 @@ app.post('/api/admin/company-images/upload', upload.array('images', 10), (req, r
       size: file.size,
       mimetype: file.mimetype,
       path: file.path,
-      url: `http://localhost:5000/uploads/company-images/${file.filename}`, // Full URL to access file
+      url: `https://anjaliinfraservice.onrender.com/uploads/company-images/${file.filename}`, // Full URL to access file
       relativePath: `/uploads/company-images/${file.filename}` // Relative path
     }));
 
@@ -174,7 +174,7 @@ app.get('/api/admin/company-images', (req, res) => {
           size: stats.size,
           created: stats.birthtime,
           modified: stats.mtime,
-          url: `http://localhost:5000/uploads/company-images/${filename}`,
+          url: `https://anjaliinfraservice.onrender.com/uploads/company-images/${filename}`,
           relativePath: `/uploads/company-images/${filename}`
         };
       })
