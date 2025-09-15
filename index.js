@@ -17,7 +17,7 @@ const app = express();
 
 // CORS configuration
 app.use(cors({
-  origin: 'https://anjali-infra.vercel.app', // Your frontend URL
+  origin: 'https://www.anjaliinfra.in', // Your frontend URL
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
