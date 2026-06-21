@@ -4,7 +4,8 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-// import { mail } from './Mail';
+import { mail } from './Mail.js';
+
 
 
 
@@ -15,9 +16,11 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+app.use(express.json())
 // CORS configuration
 app.use(cors({
-  origin: 'https://www.anjaliinfra.in', // Your frontend URL
+  // origin: 'https://www.anjaliinfra.in', // Your frontend URL
+  origin: 'http://localhost:5173', // Your frontend URL
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
@@ -111,7 +114,7 @@ app.post('/api/admin/company-images/upload', upload.array('images', 10), (req, r
       size: file.size,
       mimetype: file.mimetype,
       path: file.path,
-      url: `https://anjaliinfraservice.onrender.com/uploads/company-images/${file.filename}`, // Full URL to access file
+      url: `${req.protocol}://${req.get('host')}/uploads/company-images/${file.filename}`, // Dynamic URL to access file
       relativePath: `/uploads/company-images/${file.filename}` // Relative path
     }));
 
@@ -174,7 +177,7 @@ app.get('/api/admin/company-images', (req, res) => {
           size: stats.size,
           created: stats.birthtime,
           modified: stats.mtime,
-          url: `https://anjaliinfraservice.onrender.com/uploads/company-images/${filename}`,
+          url: `${req.protocol}://${req.get('host')}/uploads/company-images/${filename}`,
           relativePath: `/uploads/company-images/${filename}`
         };
       })
@@ -230,7 +233,6 @@ app.delete('/api/admin/company-images/:filename', (req, res) => {
 app.post("/api/contact-us",async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
-
     // ✅ Basic validation
     if (!name || !email || !subject || !message) {
       return res.status(400).json({
@@ -239,13 +241,20 @@ app.post("/api/contact-us",async (req, res) => {
       });
     }
 
-    // await mail()
+    const fullMessage = `
+      <strong>Name:</strong> ${name}<br/><br/>
+      <strong>Message:</strong><br/>
+      ${message}
+    `;
+
+    await mail(email, subject, fullMessage);
 
     res.json({
       success: true,
       message: "Form submitted successfully",
       data: { name, email, subject, message },
     });
+    
   } catch (error) {
     console.error("Error handling contact form:", error);
     res.status(500).json({
