@@ -19,8 +19,9 @@ const app = express();
 app.use(express.json())
 // CORS configuration
 app.use(cors({
-  // origin: 'https://www.anjaliinfra.in', // Your frontend URL
-  origin: 'http://localhost:5173', // Your frontend URL
+  origin: function (origin, callback) {
+    callback(null, true);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
