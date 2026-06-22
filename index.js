@@ -16,6 +16,9 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Trust proxy for HTTPS protocol resolution
+app.set('trust proxy', 1);
+
 app.use(express.json())
 // CORS configuration
 app.use(cors({
