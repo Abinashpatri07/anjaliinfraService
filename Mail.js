@@ -1,25 +1,28 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587, // use 465 for SSL if needed
+  host: "smtp.zoho.in",
+  port: 465,
+  secure: true,
   auth: {
-    user: "9041d4001@smtp-brevo.com", // your Brevo login email
-    pass: "OV9MRqLGPB13I7TW",          // generate from Brevo SMTP settings
+    user: "mishra.niranjan@anjaliinfra.in",
+    pass: "6eNw91AcXSvt",
   },
 });
 
-export async function mail(to = [], subject = "", message = "") {
+export async function mail(to = "", subject = "", message = "") {
   try {
     const info = await transporter.sendMail({
-      from: `"Agstamp" <abinashpatri5@gmail.com>`, // change to match auth user
-      to: `${to.join(",")}`,
+      from: `"Anjaliinfra.in" <mishra.niranjan@anjaliinfra.in>`, // change to match auth user
+      to: 'mishra.niranjan@anjaliinfra.in',
       subject: subject,
-      html: message,
+      html: message + "<br/>Customer Email Address: " + to,
     });
+
     return info;
   } catch (error) {
-    return error;
+    console.log(error);
+    throw error;
   }
 }
 
